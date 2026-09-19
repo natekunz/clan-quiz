@@ -1,0 +1,649 @@
+<title>Warrior Cats Clan Choosing</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Nunito:wght@400;600;800&display=swap">
+<style>
+  :root{
+    --bark:#2b241e;
+    --ink:#2b241e;
+    --ink-soft:#6b5f54;
+    --parch:#f6efe4;
+    --parch-2:#efe5d6;
+    --line:#ded0ba;
+    --card:#fffaf1;
+    --pink:#e0489b;
+    --thunder:#c9762b;
+    --shadow:#6b5a7d;
+    --river:#2d7f9d;
+    --wind:#7d9a3e;
+    --focus:#e0489b;
+    --radius:14px;
+    --sky-top:#f6efe4;
+    --sky-bot:#e7d9bf;
+    --moon:#fff6dd;
+    --ridge-far:#c9b894;
+    --ridge-mid:#a89a76;
+    --ridge-near:#6f6b4c;
+    --scene-fade:rgba(246,239,228,.80);
+    --gin:#d9782b;
+    --gin-lt:#f5c894;
+    --gin-dk:#a8511a;
+    --pinkfur:#e89aa6;
+    --eye:#7fae3e;
+    --fern:#6f8f45;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --ink:#f2e9dc;
+      --ink-soft:#b6a694;
+      --parch:#1e1a16;
+      --parch-2:#272119;
+      --line:#443a2e;
+      --card:#2a2319;
+      --pink:#ff7ab8;
+      --thunder:#e8933f;
+      --shadow:#a48cc0;
+      --river:#4fb1d4;
+      --wind:#a6c355;
+      --focus:#ff7ab8;
+      --sky-top:#151b26;
+      --sky-bot:#2a2233;
+      --moon:#ffeec4;
+      --ridge-far:#3a3348;
+      --ridge-mid:#2b2739;
+      --ridge-near:#151422;
+      --scene-fade:rgba(30,26,22,.74);
+      --gin:#c96c24;
+      --gin-lt:#e3b07c;
+      --gin-dk:#8e4413;
+      --pinkfur:#c9808c;
+      --eye:#8fbe4a;
+      --fern:#3f5a2c;
+    }
+  }
+  :root[data-theme="dark"]{
+    --ink:#f2e9dc;
+    --ink-soft:#b6a694;
+    --parch:#1e1a16;
+    --parch-2:#272119;
+    --line:#443a2e;
+    --card:#2a2319;
+    --pink:#ff7ab8;
+    --thunder:#e8933f;
+    --shadow:#a48cc0;
+    --river:#4fb1d4;
+    --wind:#a6c355;
+    --focus:#ff7ab8;
+    --sky-top:#151b26;
+    --sky-bot:#2a2233;
+    --moon:#ffeec4;
+    --ridge-far:#3a3348;
+    --ridge-mid:#2b2739;
+    --ridge-near:#151422;
+    --scene-fade:rgba(30,26,22,.74);
+    --gin:#c96c24;
+    --gin-lt:#e3b07c;
+    --gin-dk:#8e4413;
+    --pinkfur:#c9808c;
+    --eye:#8fbe4a;
+    --fern:#3f5a2c;
+  }
+
+  *{box-sizing:border-box}
+  body{
+    background:var(--parch);
+    color:var(--ink);
+    font-family:Nunito,"Trebuchet MS",system-ui,sans-serif;
+    font-size:16px;
+    line-height:1.5;
+  }
+  .wrap{max-width:820px;margin:0 auto;padding-inline:16px;padding-block:20px 56px;position:relative;z-index:1}
+
+  /* Forest scene: our own territory, drawn in shapes. */
+  .scene{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
+  .scene svg{position:absolute;inset:0;width:100%;height:100%}
+  .scene::after{
+    content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom, var(--scene-fade) 0%, var(--scene-fade) 42%, transparent 100%);
+  }
+  .cat{
+    position:fixed;right:clamp(4px,3vw,48px);bottom:0;
+    width:clamp(120px,20vw,250px);height:auto;
+    z-index:0;pointer-events:none;
+  }
+  @media (max-width:700px){ .cat{opacity:.5} }
+
+  h1{
+    font-family:Fraunces,Georgia,serif;
+    font-weight:900;
+    font-size:clamp(28px,6vw,44px);
+    line-height:1.05;
+    margin:0;
+    text-wrap:balance;
+    letter-spacing:-.01em;
+  }
+  h1 .sub{display:block;font-size:.52em;font-weight:700;color:var(--pink);letter-spacing:.06em;text-transform:uppercase;margin-top:6px}
+  .tagline{color:var(--ink-soft);margin:10px 0 0;max-width:52ch}
+
+  .topbar{display:flex;flex-wrap:wrap;gap:16px;align-items:flex-end;justify-content:space-between}
+
+  .tabs{display:flex;gap:6px;background:var(--parch-2);border:1px solid var(--line);border-radius:999px;padding:4px}
+  .tabs button{
+    font:inherit;font-weight:800;border:0;background:transparent;color:var(--ink-soft);
+    padding:8px 18px;border-radius:999px;cursor:pointer;
+  }
+  .tabs button[aria-selected="true"]{background:var(--pink);color:#fff}
+
+  section.panel{margin-top:26px}
+
+  .qcard{
+    background:var(--card);
+    background:color-mix(in srgb, var(--card) 93%, transparent);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    padding:16px;
+    margin-bottom:16px;
+  }
+  .qhead{display:flex;gap:10px;align-items:flex-start;margin-bottom:12px}
+  .qnum{
+    flex:none;font-family:Fraunces,Georgia,serif;font-weight:900;font-size:20px;
+    color:var(--pink);width:34px;height:34px;display:grid;place-items:center;
+    background:var(--parch-2);border-radius:10px;
+  }
+  input[type="text"]{
+    font:inherit;width:100%;color:var(--ink);background:transparent;
+    border:0;border-bottom:2px dashed var(--line);padding:6px 2px;border-radius:2px;
+  }
+  input[type="text"]:focus{outline:none;border-bottom-color:var(--focus);background:var(--parch-2)}
+  .qtext{font-family:Fraunces,Georgia,serif;font-weight:700;font-size:19px}
+
+  .arow{display:flex;gap:10px;align-items:center;padding:7px 0;flex-wrap:wrap}
+  .arow .atext{flex:1 1 200px;min-width:0}
+  .clanpick{display:flex;gap:4px;flex:none}
+  .clanpick button{
+    width:38px;height:38px;border-radius:10px;cursor:pointer;
+    border:2px solid var(--line);background:var(--parch-2);
+    display:grid;place-items:center;padding:0;color:var(--ink-soft);
+  }
+  .clanpick button svg{width:20px;height:20px;display:block}
+  .clanpick button[aria-pressed="true"]{color:#fff;border-color:transparent}
+  .clanpick button[aria-pressed="true"][data-clan="thunder"]{background:var(--thunder)}
+  .clanpick button[aria-pressed="true"][data-clan="shadow"]{background:var(--shadow)}
+  .clanpick button[aria-pressed="true"][data-clan="river"]{background:var(--river)}
+  .clanpick button[aria-pressed="true"][data-clan="wind"]{background:var(--wind)}
+  .clanpick button:focus-visible,.tabs button:focus-visible,.btn:focus-visible,.answer:focus-visible{
+    outline:3px solid var(--focus);outline-offset:2px
+  }
+
+  .qfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:10px;
+    border-top:1px solid var(--line);padding-top:10px}
+  .hint{color:var(--ink-soft);font-size:13px}
+  .warn{color:var(--pink);font-weight:700;font-size:13px}
+
+  .btn{
+    font:inherit;font-weight:800;cursor:pointer;border-radius:12px;
+    border:2px solid var(--line);background:var(--card);color:var(--ink);padding:10px 16px;
+  }
+  .btn.primary{background:var(--pink);border-color:var(--pink);color:#fff}
+  .btn.ghost{border-style:dashed;color:var(--ink-soft)}
+  .btn.tiny{padding:4px 10px;font-size:13px;border-radius:9px}
+  .btn.wide{width:100%;padding:14px}
+
+  .legend{display:flex;flex-wrap:wrap;gap:10px;margin:0 0 18px;padding:0;list-style:none;font-size:14px}
+  .legend li{display:flex;align-items:center;gap:6px;font-weight:700}
+  .legend svg{width:18px;height:18px}
+  .t-thunder{color:var(--thunder)} .t-shadow{color:var(--shadow)}
+  .t-river{color:var(--river)} .t-wind{color:var(--wind)}
+
+  /* play */
+  .pips{display:flex;gap:6px;margin-bottom:18px}
+  .pip{height:6px;flex:1;background:var(--line);border-radius:99px}
+  .pip.done{background:var(--pink)}
+  .playq{font-family:Fraunces,Georgia,serif;font-weight:900;font-size:clamp(22px,5vw,32px);margin:0 0 18px;text-wrap:balance}
+  .answers{display:grid;gap:10px}
+  .answer{
+    font:inherit;font-weight:600;text-align:left;cursor:pointer;
+    background:var(--card);border:2px solid var(--line);border-radius:var(--radius);
+    padding:14px 16px;color:var(--ink);
+  }
+  .answer:hover{border-color:var(--pink)}
+  .result{text-align:center}
+  .badge{width:110px;height:110px;margin:0 auto 12px;display:grid;place-items:center;border-radius:28px}
+  .badge svg{width:62px;height:62px;color:#fff}
+  .resname{font-family:Fraunces,Georgia,serif;font-weight:900;font-size:clamp(30px,8vw,46px);margin:0}
+  .resline{color:var(--ink-soft);max-width:44ch;margin:8px auto 24px}
+  .bars{display:grid;gap:8px;text-align:left;max-width:420px;margin:0 auto 24px}
+  .bar{display:grid;grid-template-columns:96px 1fr 28px;gap:8px;align-items:center;font-size:14px;font-weight:700}
+  .track{height:12px;background:var(--parch-2);border-radius:99px;overflow:hidden}
+  .fill{display:block;height:100%;min-width:3px;border-radius:99px}
+  @media (prefers-reduced-motion: no-preference){
+    .fill{animation:grow .5s ease-out}
+    @keyframes grow{from{transform:scaleX(0);transform-origin:left}to{transform:scaleX(1)}}
+  }
+  .num{font-variant-numeric:tabular-nums;color:var(--ink-soft)}
+
+  .note{font-size:13px;color:var(--ink-soft);margin-top:18px;border-top:1px solid var(--line);padding-top:10px}
+
+  .share{
+    margin-top:22px;padding:16px;border:2px dashed var(--line);border-radius:var(--radius);
+    background:var(--card);background:color-mix(in srgb, var(--card) 93%, transparent);
+  }
+  .sharehead{font-family:Fraunces,Georgia,serif;font-weight:900;font-size:18px;margin:0 0 4px}
+  .share .hint{margin:0}
+  .sharerow{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 8px}
+  .sharerow input{
+    flex:1 1 220px;min-width:0;font:inherit;font-size:13px;color:var(--ink-soft);
+    background:var(--parch-2);border:1px solid var(--line);border-radius:10px;padding:10px 12px;
+    text-overflow:ellipsis;
+  }
+  .sharerow .btn{flex:none}
+  @media (prefers-reduced-motion: no-preference){
+    .answer{transition:border-color .15s ease, transform .08s ease}
+    .answer:active{transform:scale(.99)}
+  }
+</style>
+
+<div class="scene" aria-hidden="true">
+  <svg viewBox="0 0 1200 800" preserveAspectRatio="xMidYMax slice" role="presentation">
+    <defs>
+      <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" style="stop-color:var(--sky-top)"/>
+        <stop offset="100%" style="stop-color:var(--sky-bot)"/>
+      </linearGradient>
+    </defs>
+    <rect x="0" y="0" width="1200" height="800" fill="url(#sky)"/>
+    <circle cx="930" cy="275" r="62" fill="var(--moon)" opacity="0.9"/>
+    <circle cx="200" cy="120" r="2.5" fill="var(--moon)" opacity="0.5"/>
+    <circle cx="420" cy="80" r="2" fill="var(--moon)" opacity="0.4"/>
+    <circle cx="640" cy="170" r="2.5" fill="var(--moon)" opacity="0.45"/>
+    <circle cx="330" cy="220" r="1.8" fill="var(--moon)" opacity="0.35"/>
+    <circle cx="1090" cy="260" r="2" fill="var(--moon)" opacity="0.4"/>
+
+    <!-- far pine ridge -->
+    <path fill="var(--ridge-far)" d="M0,600 L0,520 L40,455 L80,520 L120,440 L160,515 L200,470 L240,525 L285,445 L330,520 L370,480 L415,530 L455,450 L500,522 L545,468 L590,528 L635,442 L680,518 L725,478 L770,530 L815,455 L860,520 L905,472 L950,528 L995,448 L1040,518 L1085,482 L1130,528 L1170,460 L1200,515 L1200,600 Z"/>
+    <!-- mid pine ridge -->
+    <path fill="var(--ridge-mid)" d="M0,700 L0,600 L55,528 L110,605 L165,545 L220,612 L280,520 L340,608 L395,558 L450,615 L510,530 L570,606 L625,552 L685,614 L745,524 L805,604 L860,560 L915,616 L975,532 L1035,606 L1090,556 L1145,614 L1200,548 L1200,700 Z"/>
+    <!-- near ridge -->
+    <path fill="var(--ridge-near)" d="M0,800 L0,706 C160,672 300,700 430,714 C560,728 660,700 760,684 C880,664 1010,676 1200,652 L1200,800 Z"/>
+  </svg>
+</div>
+
+<!-- Our own ginger cat, sitting in the ferns. Drawn in shapes, not borrowed. -->
+<svg class="cat" viewBox="0 0 200 250" aria-hidden="true" role="presentation">
+  <g class="fern"><path d="M6,250 C10,210 26,186 46,176 C30,196 22,222 22,250 Z" fill="var(--fern)"/></g>
+  <!-- tail -->
+  <path d="M141,233 C186,238 200,196 178,168 C194,200 180,224 141,219 Z" fill="var(--gin)"/>
+  <path d="M170,178 c8,6 10,14 9,22" stroke="var(--gin-dk)" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <!-- body -->
+  <path d="M57,248 C48,192 63,136 100,136 C137,136 152,192 143,248 Z" fill="var(--gin)"/>
+  <path d="M79,248 C75,206 83,160 100,160 C117,160 125,206 121,248 Z" fill="var(--gin-lt)"/>
+  <path d="M64,180 c-4,12 -5,24 -4,36" stroke="var(--gin-dk)" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M136,180 c4,12 5,24 4,36" stroke="var(--gin-dk)" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <!-- front paws -->
+  <ellipse cx="78" cy="238" rx="16" ry="11" fill="var(--gin-lt)"/>
+  <ellipse cx="122" cy="238" rx="16" ry="11" fill="var(--gin-lt)"/>
+  <!-- ears -->
+  <path d="M63,62 L56,12 L98,44 Z" fill="var(--gin)"/>
+  <path d="M137,62 L144,12 L102,44 Z" fill="var(--gin)"/>
+  <path d="M69,58 L65,27 L92,48 Z" fill="var(--pinkfur)"/>
+  <path d="M131,58 L135,27 L108,48 Z" fill="var(--pinkfur)"/>
+  <!-- head -->
+  <ellipse cx="100" cy="92" rx="49" ry="45" fill="var(--gin)"/>
+  <path d="M100,54 v26" stroke="var(--gin-dk)" stroke-width="6" fill="none" stroke-linecap="round"/>
+  <path d="M85,56 c3,9 3,17 1,24" stroke="var(--gin-dk)" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <path d="M115,56 c-3,9 -3,17 -1,24" stroke="var(--gin-dk)" stroke-width="5" fill="none" stroke-linecap="round"/>
+  <ellipse cx="100" cy="114" rx="26" ry="18" fill="var(--gin-lt)"/>
+  <!-- eyes -->
+  <ellipse cx="80" cy="92" rx="11" ry="13" fill="var(--eye)"/>
+  <ellipse cx="120" cy="92" rx="11" ry="13" fill="var(--eye)"/>
+  <ellipse cx="80" cy="92" rx="4" ry="11" fill="#20180f"/>
+  <ellipse cx="120" cy="92" rx="4" ry="11" fill="#20180f"/>
+  <circle cx="84" cy="86" r="3" fill="#fff" opacity=".9"/>
+  <circle cx="124" cy="86" r="3" fill="#fff" opacity=".9"/>
+  <!-- nose and mouth -->
+  <path d="M100,113 L92,105 L108,105 Z" fill="var(--pinkfur)"/>
+  <path d="M100,113 v6 M100,119 c-4,6 -11,5 -13,0 M100,119 c4,6 11,5 13,0"
+        stroke="var(--gin-dk)" stroke-width="3" fill="none" stroke-linecap="round"/>
+  <!-- whiskers -->
+  <g stroke="var(--gin-lt)" stroke-width="2.5" stroke-linecap="round" opacity=".85">
+    <path d="M76,110 L36,102 M76,116 L34,120 M124,110 L164,102 M124,116 L166,120"/>
+  </g>
+</svg>
+
+<div class="wrap">
+  <div class="topbar">
+    <h1>Warrior Cats<span class="sub">Clan choosing</span></h1>
+    <div class="tabs" role="tablist" aria-label="Build or play">
+      <button id="tab-build" role="tab" aria-selected="true" aria-controls="panel-build">Build</button>
+      <button id="tab-play" role="tab" aria-selected="false" aria-controls="panel-play">Play</button>
+    </div>
+  </div>
+  <p class="tagline" id="tagline">Write a question, then tap a clan symbol next to each answer to say where it sends you.</p>
+
+  <section class="panel" id="panel-build" role="tabpanel" aria-labelledby="tab-build">
+    <ul class="legend" id="legend"></ul>
+    <div id="qlist"></div>
+    <button class="btn ghost wide" id="addq">+ Add a question</button>
+
+    <div class="share">
+      <p class="sharehead">Your quiz link</p>
+      <p class="hint">The whole quiz is packed inside this link. Anybody who opens it gets your questions.</p>
+      <div class="sharerow">
+        <input type="text" id="sharelink" readonly aria-label="Link to your quiz">
+        <button class="btn primary" id="copylink">Copy share link</button>
+      </div>
+      <p class="hint" id="linklen"></p>
+    </div>
+
+    <p class="note" id="savenote">Saving…</p>
+  </section>
+
+  <section class="panel" id="panel-play" role="tabpanel" aria-labelledby="tab-play" hidden></section>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var CLANS = {
+    thunder:{name:"ThunderClan", color:"var(--thunder)", line:"Brave, loyal, and never backs down from a fight it believes in."},
+    shadow:{name:"ShadowClan", color:"var(--shadow)", line:"Clever, secretive, and completely at home in the dark."},
+    river:{name:"RiverClan", color:"var(--river)", line:"Calm, graceful, and the only cats who actually like getting wet."},
+    wind:{name:"WindClan", color:"var(--wind)", line:"Fast, free, and happiest running flat out across open moor."}
+  };
+  var ORDER = ["thunder","shadow","river","wind"];
+
+  var SYMBOL = {
+    thunder:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M13.5 2 5 13.5h5.2L9 22l9-12h-5.4z" fill="currentColor"/></svg>',
+    shadow:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 6 11h3l-4 7h14l-4-7h3z" fill="currentColor"/><rect x="11" y="17" width="2" height="5" fill="currentColor"/></svg>',
+    river:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8c3-3 5 3 8 0s5 3 8 0M2 14c3-3 5 3 8 0s5 3 8 0M2 20c3-3 5 3 8 0s5 3 8 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>',
+    wind:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 8h12a3 3 0 1 0-3-3M2 13h16a3 3 0 1 1-3 3M2 18h9" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg>'
+  };
+
+  function blankQuestion(){
+    return {id:"q"+Math.random().toString(36).slice(2,9), text:"", answers:ORDER.map(function(c){return {text:"", clan:c};})};
+  }
+
+  // The starting quiz is Vivian's own paper sketch, with each answer pointed at a different clan.
+  var SEED = {
+    title:"Warrior Cats Clan choosing",
+    questions:[
+      {id:"q1", text:"Do you like dogs?", answers:[
+        {text:"I love them!", clan:"thunder"},
+        {text:"I hate them.", clan:"shadow"},
+        {text:"Nah, I'd swim away.", clan:"river"},
+        {text:"No, but I could outrun one.", clan:"wind"}
+      ]},
+      {id:"q2", text:"Do you like your friends?", answers:[
+        {text:"Yes, I'd fight for them.", clan:"thunder"},
+        {text:"Some of them. I keep secrets.", clan:"shadow"},
+        {text:"Yeah, silly!", clan:"river"},
+        {text:"I like being on my own.", clan:"wind"}
+      ]},
+      {id:"q3", text:"Favourite colour?", answers:[
+        {text:"Red or orange", clan:"thunder"},
+        {text:"Purple", clan:"shadow"},
+        {text:"Blue", clan:"river"},
+        {text:"Green", clan:"wind"}
+      ]}
+    ]
+  };
+
+  var quiz = JSON.parse(JSON.stringify(SEED));
+  var db = null, docRef = null, canWrite = true;
+
+  var $ = function(id){ return document.getElementById(id); };
+  var qlist = $("qlist"), savenote = $("savenote"), playPanel = $("panel-play");
+
+  function esc(s){ return String(s).replace(/[&<>"']/g, function(c){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]; }); }
+
+  /* ---------- legend ---------- */
+  $("legend").innerHTML = ORDER.map(function(c){
+    return '<li class="t-'+c+'">'+SYMBOL[c]+CLANS[c].name+'</li>';
+  }).join("");
+
+  /* ---------- saving: this computer, and the link ---------- */
+  var LS_KEY = "clanquiz.v1";
+  var saveTimer = null;
+  function setNote(t){ savenote.textContent = t; }
+
+  // Squeeze the quiz down small enough to ride inside a web link.
+  function toCompact(q){
+    return { t: q.title, q: q.questions.map(function(x){
+      return [x.text].concat(x.answers.map(function(a){ return [a.text, ORDER.indexOf(a.clan)]; }));
+    })};
+  }
+  function fromCompact(c){
+    return { title: c.t || "Warrior Cats Clan choosing",
+      questions: (c.q || []).map(function(row, i){
+        return { id:"q"+i+Math.random().toString(36).slice(2,6), text: row[0] || "",
+          answers: row.slice(1).map(function(a){
+            return { text: a[0] || "", clan: ORDER[a[1]] || ORDER[0] };
+          })};
+      })};
+  }
+  function packLink(str){
+    var bytes = new TextEncoder().encode(str), bin = "";
+    for(var i=0;i<bytes.length;i++){ bin += String.fromCharCode(bytes[i]); }
+    return btoa(bin).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  }
+  function unpackLink(code){
+    var b = code.replace(/-/g,"+").replace(/_/g,"/");
+    while(b.length % 4){ b += "="; }
+    var bin = atob(b), bytes = new Uint8Array(bin.length);
+    for(var i=0;i<bin.length;i++){ bytes[i] = bin.charCodeAt(i); }
+    return new TextDecoder().decode(bytes);
+  }
+  function shareURL(){
+    var base = location.href.split("#")[0];
+    return base + "#q=" + packLink(JSON.stringify(toCompact(quiz)));
+  }
+  function refreshShareLink(){
+    var box = document.getElementById("sharelink");
+    if(!box){ return; }
+    var url = shareURL();
+    box.value = url;
+    document.getElementById("linklen").textContent = url.length + " characters long";
+  }
+
+  function saveLocal(){
+    try{
+      localStorage.setItem(LS_KEY, JSON.stringify(quiz));
+      setNote("Saved on this computer. Send the link below to share it with somebody else.");
+    }catch(e){
+      setNote("This browser won't let me save here. Copy the link below to keep your quiz.");
+    }
+  }
+  function save(now){
+    refreshShareLink();
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveLocal, now ? 0 : 400);
+  }
+
+  /* ---------- builder ---------- */
+  function clanPicker(qi, ai, current){
+    var html = '<div class="clanpick" role="group" aria-label="Which clan does this answer point to?">';
+    for(var i=0;i<ORDER.length;i++){
+      var c = ORDER[i];
+      html += '<button type="button" data-clan="'+c+'" data-qi="'+qi+'" data-ai="'+ai+'"'
+            + ' aria-pressed="'+(current===c)+'"'
+            + ' title="'+CLANS[c].name+'" aria-label="'+CLANS[c].name+'">'+SYMBOL[c]+'</button>';
+    }
+    return html + '</div>';
+  }
+
+  function renderBuilder(){
+    var html = "";
+    for(var i=0;i<quiz.questions.length;i++){
+      var q = quiz.questions[i];
+      var used = {}, dupe = false;
+      for(var j=0;j<q.answers.length;j++){
+        if(used[q.answers[j].clan]){ dupe = true; }
+        used[q.answers[j].clan] = true;
+      }
+      html += '<div class="qcard">'
+        + '<div class="qhead"><div class="qnum">'+(i+1)+'</div>'
+        + '<input type="text" class="qtext" id="qt-'+q.id+'" data-qi="'+i+'" data-field="q"'
+        + ' value="'+esc(q.text)+'" placeholder="Ask something…" aria-label="Question '+(i+1)+'"></div>';
+      for(var a=0;a<q.answers.length;a++){
+        html += '<div class="arow">'
+          + '<input type="text" class="atext" id="at-'+q.id+'-'+a+'" data-qi="'+i+'" data-ai="'+a+'" data-field="a"'
+          + ' value="'+esc(q.answers[a].text)+'" placeholder="Answer '+(a+1)+'…" aria-label="Answer '+(a+1)+'">'
+          + clanPicker(i, a, q.answers[a].clan)
+          + '</div>';
+      }
+      html += '<div class="qfoot">'
+        + (dupe ? '<span class="warn">Two answers point to the same clan.</span>'
+                : '<span class="hint">One answer for each clan. Nice fork.</span>')
+        + '<button type="button" class="btn tiny" data-del="'+i+'">Delete question</button>'
+        + '</div></div>';
+    }
+    if(!quiz.questions.length){
+      html = '<p class="hint">No questions yet. Tap the button below to start one.</p>';
+    }
+    qlist.innerHTML = html;
+  }
+
+  qlist.addEventListener("input", function(e){
+    var t = e.target;
+    if(t.dataset.field === "q"){ quiz.questions[+t.dataset.qi].text = t.value; save(); }
+    else if(t.dataset.field === "a"){ quiz.questions[+t.dataset.qi].answers[+t.dataset.ai].text = t.value; save(); }
+  });
+
+  qlist.addEventListener("click", function(e){
+    var btn = e.target.closest("button");
+    if(!btn){ return; }
+    if(btn.dataset.del !== undefined){
+      quiz.questions.splice(+btn.dataset.del, 1);
+      renderBuilder(); save(true); return;
+    }
+    if(btn.dataset.clan){
+      quiz.questions[+btn.dataset.qi].answers[+btn.dataset.ai].clan = btn.dataset.clan;
+      renderBuilder(); save(true);
+    }
+  });
+
+  $("addq").addEventListener("click", function(){
+    quiz.questions.push(blankQuestion());
+    renderBuilder(); save(true);
+    var last = qlist.lastElementChild;
+    if(last){ var inp = last.querySelector("input"); if(inp){ inp.focus(); } }
+  });
+
+  /* ---------- play ---------- */
+  var step = 0, score = null;
+
+  function playable(){
+    return quiz.questions.filter(function(q){
+      if(!q.text.trim()){ return false; }
+      return q.answers.filter(function(a){ return a.text.trim(); }).length >= 2;
+    });
+  }
+
+  function renderPlay(){
+    var qs = playable();
+    if(!qs.length){
+      playPanel.innerHTML = '<div class="qcard"><p class="playq">Nothing to play yet.</p>'
+        + '<p class="hint">A question needs its text and at least two answers filled in before it can go in the quiz.</p></div>';
+      return;
+    }
+    if(score === null){ score = {thunder:0, shadow:0, river:0, wind:0}; }
+
+    if(step >= qs.length){
+      var best = ORDER[0];
+      ORDER.forEach(function(c){ if(score[c] > score[best]){ best = c; } });
+      var total = Math.max(1, qs.length);
+      var bars = ORDER.map(function(c){
+        return '<div class="bar"><span class="t-'+c+'">'+CLANS[c].name+'</span>'
+          + '<span class="track"><span class="fill" style="width:'+(score[c]/total*100)+'%;background:'+CLANS[c].color+'"></span></span>'
+          + '<span class="num">'+score[c]+'</span></div>';
+      }).join("");
+      playPanel.innerHTML = '<div class="result">'
+        + '<div class="badge" style="background:'+CLANS[best].color+'">'+SYMBOL[best]+'</div>'
+        + '<p class="hint">You belong to</p>'
+        + '<h2 class="resname t-'+best+'">'+CLANS[best].name+'</h2>'
+        + '<p class="resline">'+CLANS[best].line+'</p>'
+        + '<div class="bars">'+bars+'</div>'
+        + '<p class="hint">Out of '+qs.length+' question'+(qs.length===1?"":"s")+'.</p>'
+        + '<button type="button" class="btn primary" id="again">Take it again</button></div>';
+      $("again").addEventListener("click", function(){ step = 0; score = null; renderPlay(); });
+      return;
+    }
+
+    var q = qs[step];
+    var pips = qs.map(function(_, i){ return '<span class="pip'+(i<=step?" done":"")+'"></span>'; }).join("");
+    var answers = q.answers.filter(function(a){ return a.text.trim(); }).map(function(a, i){
+      return '<button type="button" class="answer" data-clan="'+a.clan+'">'+esc(a.text)+'</button>';
+    }).join("");
+    playPanel.innerHTML = '<div class="pips">'+pips+'</div>'
+      + '<p class="hint">Question '+(step+1)+' of '+qs.length+'</p>'
+      + '<h2 class="playq">'+esc(q.text)+'</h2>'
+      + '<div class="answers">'+answers+'</div>';
+  }
+
+  playPanel.addEventListener("click", function(e){
+    var btn = e.target.closest(".answer");
+    if(!btn){ return; }
+    score[btn.dataset.clan] += 1;
+    step += 1;
+    renderPlay();
+  });
+
+  /* ---------- tabs ---------- */
+  function showTab(which){
+    var build = which === "build";
+    $("tab-build").setAttribute("aria-selected", String(build));
+    $("tab-play").setAttribute("aria-selected", String(!build));
+    $("panel-build").hidden = !build;
+    playPanel.hidden = build;
+    $("tagline").textContent = build
+      ? "Write a question, then tap a clan symbol next to each answer to say where it sends you."
+      : "This is what somebody taking your quiz sees.";
+    if(!build){ step = 0; score = null; renderPlay(); }
+  }
+  $("tab-build").addEventListener("click", function(){ showTab("build"); });
+  $("tab-play").addEventListener("click", function(){ showTab("play"); });
+
+  /* ---------- boot ---------- */
+  var fromLink = false;
+  var hash = location.hash || "";
+  if(hash.indexOf("#q=") === 0){
+    try{
+      var loaded = fromCompact(JSON.parse(unpackLink(hash.slice(3))));
+      if(loaded.questions.length){ quiz = loaded; fromLink = true; }
+    }catch(e){ /* a broken link just falls back to the starting quiz */ }
+  }
+  if(!fromLink){
+    try{
+      var raw = localStorage.getItem(LS_KEY);
+      if(raw){
+        var d = JSON.parse(raw);
+        if(d && Array.isArray(d.questions) && d.questions.length){ quiz = d; }
+      }
+    }catch(e){ /* no storage: start from the seed quiz */ }
+  }
+
+  renderBuilder();
+  refreshShareLink();
+  setNote(fromLink
+    ? "You opened somebody else's quiz. Changing it here only changes your copy."
+    : "Saved on this computer. Send the link below to share it with somebody else.");
+
+  document.getElementById("copylink").addEventListener("click", function(){
+    var box = document.getElementById("sharelink");
+    box.focus(); box.select();
+    var done = function(){
+      var b = document.getElementById("copylink");
+      b.textContent = "Copied!";
+      setTimeout(function(){ b.textContent = "Copy share link"; }, 1800);
+    };
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(box.value).then(done, function(){});
+    }
+  });
+
+  if(fromLink){ showTab("play"); }
+
+})();
+</script>
